@@ -7,7 +7,13 @@ import {
   doc,
   addDoc,
   deleteDoc,
-  updateDoc
+  updateDoc,
+  query,
+  orderBy,
+  limit,
+  startAfter,
+  QueryDocumentSnapshot,
+  type DocumentData
 } from 'firebase/firestore'
 import type { ICocktailBaseInfo, ICocktailFullInfo } from './Interfaces'
 import {
@@ -18,15 +24,6 @@ import {
   type StorageReference
 } from 'firebase/storage'
 import { firebaseConfig } from './config/firebase.config'
-// Your web app's Firebase configuration
-// const firebaseConfig = {
-//   apiKey: 'AIzaSyAuGRMw67sdhuPO-vVR4mQHYFBMK616Tvw',
-//   authDomain: 'my-bar-9874b.firebaseapp.com',
-//   projectId: 'my-bar-9874b',
-//   storageBucket: 'my-bar-9874b.appspot.com',
-//   messagingSenderId: '977958489287',
-//   appId: '1:977958489287:web:160c05c732a74ed12f42e2'
-// }
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
@@ -34,13 +31,26 @@ const storage = getStorage()
 
 export const db = getFirestore(app)
 const cocktailsCollection = collection(db, 'cocktails')
+let lastItem: QueryDocumentSnapshot<DocumentData, DocumentData> | null = null
 
 /**
  * Get all cocktails
  * @returns array of all cocktails
  */
 export const getCocktails = async (): Promise<ICocktailFullInfo[]> => {
-  const querySnapshot = await getDocs(cocktailsCollection)
+  if (lastItem === undefined) {
+    return []
+  }
+
+  const q = query(
+    cocktailsCollection,
+    orderBy('baseAlcohol'),
+    orderBy('name'),
+    startAfter(lastItem),
+    limit(2)
+  )
+  const querySnapshot = await getDocs(q)
+  lastItem = querySnapshot.docs[querySnapshot.docs.length - 1]
 
   const data = querySnapshot.docs.map((doc) => {
     return {

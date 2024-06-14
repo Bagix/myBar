@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useBarStore } from '../stores/barStore'
 import { storeToRefs } from 'pinia'
 import CocktailCard from '@/components/CocktailCard.vue'
@@ -9,11 +9,30 @@ import { db } from '@/firebase'
 const store = useBarStore()
 const { cocktails } = storeToRefs(store)
 
-onMounted(async () => {
+const trigger = ref<HTMLElement>()
+
+function handleObserver(entries: IntersectionObserverEntry[]): void {
+  if (entries[0].isIntersecting) {
+    store.loadData()
+  }
+}
+
+onMounted(() => {
   const q = query(collection(db, 'cocktails'))
   onSnapshot(q, (): any => {
     store.loadData()
   })
+
+  const options = {
+    rootMargin: '200px'
+  }
+
+  const observer = new IntersectionObserver((enteries) => handleObserver(enteries), options)
+  const trigerElement = trigger.value
+
+  if (trigerElement) {
+    observer.observe(trigerElement)
+  }
 })
 </script>
 
@@ -25,6 +44,8 @@ onMounted(async () => {
       :cocktail="cocktail"
       class="item"
     />
+    <div ref="trigger" id="trigger" v-show="!store.isLoading" />
+    <span v-if="store.isLoading">LOADER</span>
   </div>
 </template>
 
@@ -43,12 +64,25 @@ onMounted(async () => {
   }
 }
 
+.test-el {
+  width: 100%;
+  height: 50vh;
+  background: #676767;
+}
+
 .item {
   width: 100%;
   max-width: 400px;
+  height: 100vh;
 
   @media (width >= 768px) {
     width: 400px;
   }
+}
+
+#trigger {
+  width: 100%;
+  height: 10px;
+  background: red;
 }
 </style>
