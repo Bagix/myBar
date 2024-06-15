@@ -22,8 +22,9 @@ function toggleCard(): void {
     </div>
     <p class="description">{{ cocktail.description }}</p>
     <div class="accordion">
-      <div v-if="cocktail.imageUrl" class="image-wrapper">
-        <img :src="cocktail.imageUrl" />
+      <div class="image-wrapper">
+        <img v-if="cocktail.imageUrl" :src="cocktail.imageUrl" />
+        <div v-else class="image-placeholder" />
       </div>
       <p class="tools">{{ cocktail.tools }}</p>
       <ul class="ingredients">
@@ -39,13 +40,19 @@ $icon-size: 25px;
 
 .card {
   width: 100%;
-  max-width: 500px;
   padding: 16px;
-  background-color: #2a2a2a;
+  background-color: var(--vt-c-black-soft);
   border-radius: 5px;
 
   @media (width >= 768px) {
     padding: 16px 24px;
+  }
+
+  @media (width >= 1024px) {
+    width: 15%;
+    min-width: 350px;
+    height: 80vh;
+    overflow-y: auto;
   }
 
   &.is-open {
@@ -75,6 +82,10 @@ $icon-size: 25px;
   max-height: 0;
   overflow: hidden;
   transition: all 0.25s linear;
+
+  @media (width >= 1024px) {
+    max-height: unset;
+  }
 }
 
 .header {
@@ -88,13 +99,29 @@ $icon-size: 25px;
   font-size: $icon-size;
   cursor: pointer;
   transition: all 0.25s linear;
+
+  @media (width >= 1024px) {
+    display: none;
+  }
 }
 
 .image-wrapper {
   display: flex;
   justify-content: center;
-  width: 100%;
+  aspect-ratio: 0.667;
+  margin: auto;
   margin-top: 10px;
+
+  .image-placeholder {
+    display: none;
+
+    @media (width >= 1024px) {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: var(--vt-c-black-mute);
+    }
+  }
 
   img {
     width: 100%;
