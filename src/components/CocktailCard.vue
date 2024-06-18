@@ -57,7 +57,8 @@ onMounted(() => {
       <div class="accordion">
         <div class="image-wrapper">
           <img v-if="cocktail.imageUrl" :src="cocktail.imageUrl" />
-          <div v-else class="image-placeholder" />
+          <!-- <div v-else class="image-placeholder" /> -->
+          <img v-else src="../assets/drink-icon.svg" class="image-placeholder" />
         </div>
         <p class="tools">{{ cocktail.tools }}</p>
         <ul class="ingredients">
@@ -84,7 +85,7 @@ $icon-size: 25px;
     overflow: hidden;
   }
 
-  @media (width >= 1366px) {
+  @media (width >= 1600px) {
     height: 70vh;
   }
 
@@ -109,7 +110,6 @@ $icon-size: 25px;
 
   @media (width >= 1024px) {
     padding: 24px;
-    overflow-y: auto;
   }
 }
 
@@ -142,6 +142,7 @@ $icon-size: 25px;
   .card-wrapper {
     @media (width >= 1024px) {
       margin-right: -17px; // hide scroll
+      overflow-y: auto;
     }
   }
 }
@@ -199,7 +200,7 @@ $icon-size: 25px;
       display: block;
       width: 100%;
       height: auto;
-      background: var(--vt-c-black-mute);
+      background: #444;
     }
   }
 
