@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { ICocktailBaseInfo, ICocktailFullInfo } from '@/Interfaces'
-import { getCocktails, addCocktail, deleteCocktail } from '../firebase'
+import { getCocktails, addCocktail, deleteCocktail, updateCocktail } from '../firebase'
 
 export const useBarStore = defineStore('bar', () => {
   const cocktails = ref<ICocktailFullInfo[]>([])
@@ -33,5 +33,9 @@ export const useBarStore = defineStore('bar', () => {
     await deleteCocktail(id)
   }
 
-  return { cocktails, isLoading, addToStore, loadData, deleteFromStore }
+  async function updateStore(data: ICocktailFullInfo, file: File | undefined): Promise<void> {
+    await updateCocktail(data, file)
+  }
+
+  return { cocktails, isLoading, addToStore, loadData, deleteFromStore, updateStore }
 })

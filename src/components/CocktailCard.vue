@@ -57,7 +57,6 @@ onMounted(() => {
       <div class="accordion">
         <div class="image-wrapper">
           <img v-if="cocktail.imageUrl" :src="cocktail.imageUrl" />
-          <!-- <div v-else class="image-placeholder" /> -->
           <img v-else src="../assets/drink-icon.svg" class="image-placeholder" />
         </div>
         <p class="tools">{{ cocktail.tools }}</p>

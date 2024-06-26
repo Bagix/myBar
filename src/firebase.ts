@@ -47,7 +47,7 @@ export const getCocktails = async (): Promise<ICocktailFullInfo[]> => {
     orderBy('baseAlcohol'),
     orderBy('name'),
     startAfter(lastItem),
-    limit(2)
+    limit(10)
   )
   const querySnapshot = await getDocs(q)
   lastItem = querySnapshot.docs[querySnapshot.docs.length - 1]
@@ -87,6 +87,35 @@ export const addCocktail = async (data: ICocktailBaseInfo, file: File | undefine
     await updateDoc(item, {
       imageUrl: fullFilePath
     })
+  }
+}
+
+/**
+ * Update element in collection
+ * @param id id of element to remove
+ */
+export const updateCocktail = async (data: ICocktailFullInfo, file: File | undefined) => {
+  const cocktailRef = doc(cocktailsCollection, data.id)
+
+  await updateDoc(cocktailRef, {
+    name: data.name,
+    baseAlcohol: data.baseAlcohol,
+    description: data.description,
+    preparation: data.preparation,
+    ingredients: data.ingredients,
+    tools: data.tools
+  })
+
+  if (file) {
+    const storageRef = ref(storage, data.id)
+    const isFileUploaded = await uploadFile(storageRef, file)
+
+    if (!data.imageUrl && isFileUploaded) {
+      const fullFilePath = await getDownloadURL(ref(storage, data.id))
+      await updateDoc(cocktailRef, {
+        imageUrl: fullFilePath
+      })
+    }
   }
 }
 

@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import AddNewItemForm from '@/components/AddNewItemForm.vue'
+import AdminItemsList from '@/components/AdminItemsList.vue'
 </script>
 
 <template>
   <div class="container">
     <AddNewItemForm />
   </div>
+  <AdminItemsList />
 </template>
 
 <style lang="scss" scoped>
