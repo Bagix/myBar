@@ -82,7 +82,9 @@ function deleteItem(): void {
 
 .image-wrapper {
   position: relative;
+  max-width: 300px;
   aspect-ratio: 0.667;
+  margin: auto;
 
   img {
     width: 100%;

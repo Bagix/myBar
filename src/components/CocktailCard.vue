@@ -140,6 +140,7 @@ $icon-size: 25px;
 
   .card-wrapper {
     @media (width >= 1024px) {
+      padding-right: 41px;
       margin-right: -17px; // hide scroll
       overflow-y: auto;
     }
@@ -170,6 +171,13 @@ $icon-size: 25px;
 
 .header {
   position: relative;
+
+  @media (width >= 1024px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 77px;
+  }
 }
 
 .toggle {

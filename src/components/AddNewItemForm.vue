@@ -105,7 +105,6 @@ textarea {
 :deep(.btn-upload) {
   justify-content: center;
   width: 100%;
-  height: 80px;
 
   .p-button-label {
     flex: unset;
